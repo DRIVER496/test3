@@ -1,1 +1,54 @@
-hello268
+board_size = 4
+board = [' ',0,1,2,'A','-','-','-','B','-','-','-','C','-','-','-']
+def output_board():
+	for i in range(board_size):
+		print (board[i*4], board[1+i*4], board[2+i*4], board[3+i*4])
+def check_win():
+	win = False
+	win_combination = ((5,6,7), (9,10,11), (13,14,15),	(5,9,13), (6,10,14), (7,11,15),(5,11,15), (7,10,13))
+	for pos in win_combination:
+		if (board[pos[0]] == board[pos[1]] and board[pos[1]] == board[pos[2]] and board[pos[1]] in ('X','O')):
+			win = board[pos[0]]
+	return win
+def g_step(index, char):
+	if (board[index] in ('X','O')):
+		return False
+	board[index] = char
+	return True
+def start():
+	current_player = 'X'
+	step = 1
+	output_board()
+	while (step < 10) and (check_win() == False):
+		print(step)
+		index_mode = input('Ходит ' + current_player + '. Введите координаты поля:')
+		if (index_mode == 'A0'):
+			index = 5
+		if (index_mode == 'A1'):
+			index = 6
+		if (index_mode == 'A2'):
+			index = 7
+		if (index_mode == 'B0'):
+			index = 9
+		if (index_mode == 'B1'):
+			index = 10
+		if (index_mode == 'B2'):
+			index = 11
+		if (index_mode == 'C0'):
+			index = 13
+		if (index_mode == 'C1'):
+			index = 14
+		if (index_mode == 'C2'):
+			index = 15
+		if (g_step(int(index), current_player)):
+			if (current_player == 'X'):
+				current_player = 'O'
+			else:
+				current_player = 'X'
+			output_board()
+			step += 1
+	if (step == 10):
+		print('Ничья!')
+	else:
+		print('Выиграл ' + check_win())
+start()
