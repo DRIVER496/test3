@@ -1,0 +1,137 @@
+import random
+
+class CoorException(Exception):
+    def __str__(self):
+        return "Совпадение координат"
+
+class Dot:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __eq__(self, other):
+        return isinstance(other, Dot) and \
+            self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+
+
+
+class Ship:
+
+    def __init__(self, len, health):
+        self.len = len
+        self.health = health
+        self.vg = random.randint(1, 2)
+
+        try:
+            if self.vg == 1:
+                self.spoint = [(random.randint(1, 6)), (random.randint(1, 6 - len))]
+            else:
+                self.spoint = [(random.randint(1, 6 - len)), (random.randint(1, 6))]
+            
+        except CoorException:
+            if self.vg == 1:
+                self.spoint = [(random.randint(1, 6)), (random.randint(1, 6 - len))]
+            else:
+                self.spoint = [(random.randint(1, 6 - len)), (random.randint(1, 6))]
+
+    def dots(self):
+
+        self.coor = [[self.spoint[0], self.spoint[1]]]
+        if self.vg == 1:
+            for i in range(self.len - 1):
+                self.spoint[1] += 1
+                self.coor.append([self.spoint[0], self.spoint[1]])
+        else:
+            for i in range(self.len - 1):
+                self.spoint[0] += 1
+                self.coor.append([self.spoint[0], self.spoint[1]])
+        return self.coor
+
+
+
+ship11 = Ship(1, 1)
+ship12 = Ship(1, 1)
+ship13 = Ship(1, 1)
+ship21 = Ship(2, 2)
+ship22 = Ship(2, 2)
+ship3 = Ship(3, 3)
+
+ship11.dots()
+ship12.dots()
+ship13.dots()
+ship21.dots()
+ship22.dots()
+ship3.dots()
+print(ship11.coor)
+coorlist = ship11.coor + ship12.coor + ship13.coor + ship21.coor + ship22.coor + ship3.coor
+print(coorlist)
+double = []
+for i in coorlist:
+    for n in range(len(coorlist)):
+        if i == coorlist[n]:
+            double.append(i)
+print(double)
+if len(coorlist) == len(double):
+    print("Ok")
+else:
+    raise CoorException()
+
+
+
+
+
+class Board(Ship):
+    def __init__(self):
+        self.matrix = [
+            [' ', 1, 2, 3, 4, 5, 6]
+            , [1, 0, 0, 0, 0, 0, 0]
+            , [2, 0, 0, 8, 0, 0, 0]
+            , [3, 0, 0, 0, 0, 0, 0]
+            , [4, 0, 0, 0, 0, 0, 0]
+            , [5, 0, 0, 0, 0, 0, 0]
+            , [6, 0, 0, 0, 0, 0, 0]
+        ]
+        self.shiplist = [ship11, ship12, ship13, ship21, ship22, ship3]
+        self.hid = True
+        self.livship = []
+
+    def add_ship(self):
+        self.matrix[ship11.coor[0][0]][ship11.coor[0][1]] = '■'
+        self.matrix[ship12.coor[0][0]][ship12.coor[0][1]] = '■'
+        self.matrix[ship13.coor[0][0]][ship13.coor[0][1]] = '■'
+        self.matrix[ship21.coor[0][0]][ship21.coor[0][1]] = '■'
+        self.matrix[ship21.coor[1][0]][ship21.coor[1][1]] = '■'
+        self.matrix[ship22.coor[0][0]][ship22.coor[0][1]] = '■'
+        self.matrix[ship22.coor[1][0]][ship22.coor[1][1]] = '■'
+        self.matrix[ship3.coor[0][0]][ship3.coor[0][1]] = '■'
+        self.matrix[ship3.coor[1][0]][ship3.coor[1][1]] = '■'
+        self.matrix[ship3.coor[2][0]][ship3.coor[2][1]] = '■'
+
+
+        for x in range(7):
+            for y in range(7):
+                print(self.matrix[x][y], '|', end=" ")
+            print()
+
+    def vbn(self):
+        print(self.shiplist)
+
+
+bn = Board()
+bn.add_ship()
+
+
+
+
+
+
+
+
+
+
+
+
